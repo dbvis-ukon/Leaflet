@@ -1,5 +1,5 @@
 /* @preserve
- * Leaflet 1.6.0+master.39b4852, a JS library for interactive maps. http://leafletjs.com
+ * Leaflet 1.6.0+master.fe2c5e9, a JS library for interactive maps. http://leafletjs.com
  * (c) 2010-2019 Vladimir Agafonkin, (c) 2010-2011 CloudMade
  */
 
@@ -9,7 +9,7 @@
 	(factory((global.L = {})));
 }(this, (function (exports) { 'use strict';
 
-var version = "1.6.0+master.39b48528";
+var version = "1.6.0+master.fe2c5e91";
 
 /*
  * @namespace Util
