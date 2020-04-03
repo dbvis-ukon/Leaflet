@@ -1,5 +1,5 @@
 /* @preserve
- * Leaflet 1.6.0+master.fe2c5e9, a JS library for interactive maps. http://leafletjs.com
+ * Leaflet 1.6.0+master.2a2799b, a JS library for interactive maps. http://leafletjs.com
  * (c) 2010-2019 Vladimir Agafonkin, (c) 2010-2011 CloudMade
  */
 
@@ -9,7 +9,7 @@
 	(factory((global.L = {})));
 }(this, (function (exports) { 'use strict';
 
-var version = "1.6.0+master.fe2c5e91";
+var version = "1.6.0+master.2a2799b4";
 
 /*
  * @namespace Util
@@ -4664,7 +4664,7 @@ var Map = Evented.extend({
 			this._animateToCenter = center;
 			this._animateToZoom = zoom;
 
-			addClass(this._mapPane, 'leaflet-zoom-anim');
+			// DomUtil.addClass(this._mapPane, 'leaflet-zoom-anim');
 		}
 
 		// @section Other Events
@@ -4684,7 +4684,7 @@ var Map = Evented.extend({
 		if (!this._animatingZoom) { return; }
 
 		if (this._mapPane) {
-			removeClass(this._mapPane, 'leaflet-zoom-anim');
+			// DomUtil.removeClass(this._mapPane, 'leaflet-zoom-anim');
 		}
 
 		this._animatingZoom = false;

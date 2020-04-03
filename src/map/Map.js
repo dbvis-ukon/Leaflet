@@ -1680,7 +1680,7 @@ export var Map = Evented.extend({
 			this._animateToCenter = center;
 			this._animateToZoom = zoom;
 
-			DomUtil.addClass(this._mapPane, 'leaflet-zoom-anim');
+			// DomUtil.addClass(this._mapPane, 'leaflet-zoom-anim');
 		}
 
 		// @section Other Events
@@ -1700,7 +1700,7 @@ export var Map = Evented.extend({
 		if (!this._animatingZoom) { return; }
 
 		if (this._mapPane) {
-			DomUtil.removeClass(this._mapPane, 'leaflet-zoom-anim');
+			// DomUtil.removeClass(this._mapPane, 'leaflet-zoom-anim');
 		}
 
 		this._animatingZoom = false;
