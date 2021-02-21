@@ -1,18 +1,15 @@
 /* @preserve
- * Leaflet 1.6.0+master.2a2799b, a JS library for interactive maps. http://leafletjs.com
+ * Leaflet 1.7.1, a JS library for interactive maps. http://leafletjs.com
  * (c) 2010-2019 Vladimir Agafonkin, (c) 2010-2011 CloudMade
  */
 
-var version = "1.6.0+master.2a2799b4";
+var version = "1.7.1";
 
 /*
  * @namespace Util
  *
  * Various utility functions, used by Leaflet internally.
  */
-
-var freeze = Object.freeze;
-Object.freeze = function (obj) { return obj; };
 
 // @function extend(dest: Object, src?: Object): Object
 // Merges the properties of the `src` object (or multiple objects) into `dest` object and returns the latter. Has an `L.extend` shortcut.
@@ -140,7 +137,7 @@ function splitWords(str) {
 // @function setOptions(obj: Object, options: Object): Object
 // Merges the given properties to the `options` of the `obj` object, returning the resulting options. See `Class options`. Has an `L.setOptions` shortcut.
 function setOptions(obj, options) {
-	if (!obj.hasOwnProperty('options')) {
+	if (!Object.prototype.hasOwnProperty.call(obj, 'options')) {
 		obj.options = obj.options ? create(obj.options) : {};
 	}
 	for (var i in options) {
@@ -247,30 +244,28 @@ function cancelAnimFrame(id) {
 	}
 }
 
-
-var Util = (Object.freeze || Object)({
-	freeze: freeze,
-	extend: extend,
-	create: create,
-	bind: bind,
-	lastId: lastId,
-	stamp: stamp,
-	throttle: throttle,
-	wrapNum: wrapNum,
-	falseFn: falseFn,
-	formatNum: formatNum,
-	trim: trim,
-	splitWords: splitWords,
-	setOptions: setOptions,
-	getParamString: getParamString,
-	template: template,
-	isArray: isArray,
-	indexOf: indexOf,
-	emptyImageUrl: emptyImageUrl,
-	requestFn: requestFn,
-	cancelFn: cancelFn,
-	requestAnimFrame: requestAnimFrame,
-	cancelAnimFrame: cancelAnimFrame
+var Util = ({
+  extend: extend,
+  create: create,
+  bind: bind,
+  get lastId () { return lastId; },
+  stamp: stamp,
+  throttle: throttle,
+  wrapNum: wrapNum,
+  falseFn: falseFn,
+  formatNum: formatNum,
+  trim: trim,
+  splitWords: splitWords,
+  setOptions: setOptions,
+  getParamString: getParamString,
+  template: template,
+  isArray: isArray,
+  indexOf: indexOf,
+  emptyImageUrl: emptyImageUrl,
+  requestFn: requestFn,
+  cancelFn: cancelFn,
+  requestAnimFrame: requestAnimFrame,
+  cancelAnimFrame: cancelAnimFrame
 });
 
 // @class Class
@@ -308,7 +303,7 @@ Class.extend = function (props) {
 
 	// inherit parent's statics
 	for (var i in this) {
-		if (this.hasOwnProperty(i) && i !== 'prototype' && i !== '__super__') {
+		if (Object.prototype.hasOwnProperty.call(this, i) && i !== 'prototype' && i !== '__super__') {
 			NewClass[i] = this[i];
 		}
 	}
@@ -1279,7 +1274,7 @@ LatLngBounds.prototype = {
 		return latIntersects && lngIntersects;
 	},
 
-	// @method overlaps(otherBounds: Bounds): Boolean
+	// @method overlaps(otherBounds: LatLngBounds): Boolean
 	// Returns `true` if the rectangle overlaps the given bounds. Two bounds overlap if their intersection is an area.
 	overlaps: function (bounds) {
 		bounds = toLatLngBounds(bounds);
@@ -1927,7 +1922,7 @@ var passiveEvents = (function () {
 	var supportsPassiveOption = false;
 	try {
 		var opts = Object.defineProperty({}, 'passive', {
-			get: function () {
+			get: function () { // eslint-disable-line getter-return
 				supportsPassiveOption = true;
 			}
 		});
@@ -1971,39 +1966,38 @@ function userAgentContains(str) {
 	return navigator.userAgent.toLowerCase().indexOf(str) >= 0;
 }
 
-
-var Browser = (Object.freeze || Object)({
-	ie: ie,
-	ielt9: ielt9,
-	edge: edge,
-	webkit: webkit,
-	android: android,
-	android23: android23,
-	androidStock: androidStock,
-	opera: opera,
-	chrome: chrome,
-	gecko: gecko,
-	safari: safari,
-	phantom: phantom,
-	opera12: opera12,
-	win: win,
-	ie3d: ie3d,
-	webkit3d: webkit3d,
-	gecko3d: gecko3d,
-	any3d: any3d,
-	mobile: mobile,
-	mobileWebkit: mobileWebkit,
-	mobileWebkit3d: mobileWebkit3d,
-	msPointer: msPointer,
-	pointer: pointer,
-	touch: touch,
-	mobileOpera: mobileOpera,
-	mobileGecko: mobileGecko,
-	retina: retina,
-	passiveEvents: passiveEvents,
-	canvas: canvas,
-	svg: svg,
-	vml: vml
+var Browser = ({
+  ie: ie,
+  ielt9: ielt9,
+  edge: edge,
+  webkit: webkit,
+  android: android,
+  android23: android23,
+  androidStock: androidStock,
+  opera: opera,
+  chrome: chrome,
+  gecko: gecko,
+  safari: safari,
+  phantom: phantom,
+  opera12: opera12,
+  win: win,
+  ie3d: ie3d,
+  webkit3d: webkit3d,
+  gecko3d: gecko3d,
+  any3d: any3d,
+  mobile: mobile,
+  mobileWebkit: mobileWebkit,
+  mobileWebkit3d: mobileWebkit3d,
+  msPointer: msPointer,
+  pointer: pointer,
+  touch: touch,
+  mobileOpera: mobileOpera,
+  mobileGecko: mobileGecko,
+  retina: retina,
+  passiveEvents: passiveEvents,
+  canvas: canvas,
+  svg: svg,
+  vml: vml
 });
 
 /*
@@ -2015,7 +2009,6 @@ var POINTER_DOWN =   msPointer ? 'MSPointerDown'   : 'pointerdown';
 var POINTER_MOVE =   msPointer ? 'MSPointerMove'   : 'pointermove';
 var POINTER_UP =     msPointer ? 'MSPointerUp'     : 'pointerup';
 var POINTER_CANCEL = msPointer ? 'MSPointerCancel' : 'pointercancel';
-var TAG_WHITE_LIST = ['INPUT', 'SELECT', 'OPTION'];
 
 var _pointers = {};
 var _pointerDocListener = false;
@@ -2056,13 +2049,8 @@ function removePointerListener(obj, type, id) {
 
 function _addPointerStart(obj, handler, id) {
 	var onDown = bind(function (e) {
-		if (e.pointerType !== (e.MSPOINTER_TYPE_MOUSE || 'mouse')) {
-			// In IE11, some touch events needs to fire for form controls, or
-			// the controls will stop working. We keep a whitelist of tag names that
-			// need these events. For other target tags, we prevent default on the event.
-			if (ie && TAG_WHITE_LIST.indexOf(e.target.tagName) >= 0) {
-				return;
-			}
+		// IE10 specific: MsTouch needs preventDefault. See #2000
+		if (e.MSPOINTER_TYPE_TOUCH && e.pointerType === e.MSPOINTER_TYPE_TOUCH) {
 			preventDefault(e);
 		}
 
@@ -2506,8 +2494,7 @@ function enableImageDrag() {
 	off(window, 'dragstart', preventDefault);
 }
 
-var _outlineElement;
-var _outlineStyle;
+var _outlineElement, _outlineStyle;
 // @function preventOutline(el: HTMLElement)
 // Makes the [outline](https://developer.mozilla.org/docs/Web/CSS/outline)
 // of the element `el` invisible. Used internally by Leaflet to prevent
@@ -2558,36 +2545,35 @@ function getScale(element) {
 	};
 }
 
-
-var DomUtil = (Object.freeze || Object)({
-	TRANSFORM: TRANSFORM,
-	TRANSITION: TRANSITION,
-	TRANSITION_END: TRANSITION_END,
-	get: get,
-	getStyle: getStyle,
-	create: create$1,
-	remove: remove,
-	empty: empty,
-	toFront: toFront,
-	toBack: toBack,
-	hasClass: hasClass,
-	addClass: addClass,
-	removeClass: removeClass,
-	setClass: setClass,
-	getClass: getClass,
-	setOpacity: setOpacity,
-	testProp: testProp,
-	setTransform: setTransform,
-	setPosition: setPosition,
-	getPosition: getPosition,
-	disableTextSelection: disableTextSelection,
-	enableTextSelection: enableTextSelection,
-	disableImageDrag: disableImageDrag,
-	enableImageDrag: enableImageDrag,
-	preventOutline: preventOutline,
-	restoreOutline: restoreOutline,
-	getSizedParentNode: getSizedParentNode,
-	getScale: getScale
+var DomUtil = ({
+  TRANSFORM: TRANSFORM,
+  TRANSITION: TRANSITION,
+  TRANSITION_END: TRANSITION_END,
+  get: get,
+  getStyle: getStyle,
+  create: create$1,
+  remove: remove,
+  empty: empty,
+  toFront: toFront,
+  toBack: toBack,
+  hasClass: hasClass,
+  addClass: addClass,
+  removeClass: removeClass,
+  setClass: setClass,
+  getClass: getClass,
+  setOpacity: setOpacity,
+  testProp: testProp,
+  setTransform: setTransform,
+  setPosition: setPosition,
+  getPosition: getPosition,
+  get disableTextSelection () { return disableTextSelection; },
+  get enableTextSelection () { return enableTextSelection; },
+  disableImageDrag: disableImageDrag,
+  enableImageDrag: enableImageDrag,
+  preventOutline: preventOutline,
+  restoreOutline: restoreOutline,
+  getSizedParentNode: getSizedParentNode,
+  getScale: getScale
 });
 
 /*
@@ -2662,6 +2648,12 @@ function browserFiresNativeDblClick() {
 	}
 }
 
+var mouseSubst = {
+	mouseenter: 'mouseover',
+	mouseleave: 'mouseout',
+	wheel: !('onwheel' in window) && 'mousewheel'
+};
+
 function addOne(obj, type, fn, context) {
 	var id = type + stamp(fn) + (context ? '_' + stamp(context) : '');
 
@@ -2682,20 +2674,17 @@ function addOne(obj, type, fn, context) {
 
 	} else if ('addEventListener' in obj) {
 
-		if (type === 'mousewheel') {
-			obj.addEventListener('onwheel' in obj ? 'wheel' : 'mousewheel', handler, passiveEvents ? {passive: false} : false);
+		if (type === 'touchstart' || type === 'touchmove' || type === 'wheel' ||  type === 'mousewheel') {
+			obj.addEventListener(mouseSubst[type] || type, handler, passiveEvents ? {passive: false} : false);
 
-		} else if ((type === 'touchstart') || (type === 'touchend')) {
-			obj.addEventListener(type, handler, passiveEvents ? {passive: false} : false);
-
-		} else if ((type === 'mouseenter') || (type === 'mouseleave')) {
+		} else if (type === 'mouseenter' || type === 'mouseleave') {
 			handler = function (e) {
 				e = e || window.event;
 				if (isExternalTarget(obj, e)) {
 					originalHandler(e);
 				}
 			};
-			obj.addEventListener(type === 'mouseenter' ? 'mouseover' : 'mouseout', handler, false);
+			obj.addEventListener(mouseSubst[type], handler, false);
 
 		} else {
 			obj.addEventListener(type, originalHandler, false);
@@ -2724,14 +2713,7 @@ function removeOne(obj, type, fn, context) {
 
 	} else if ('removeEventListener' in obj) {
 
-		if (type === 'mousewheel') {
-			obj.removeEventListener('onwheel' in obj ? 'wheel' : 'mousewheel', handler, passiveEvents ? {passive: false} : false);
-
-		} else {
-			obj.removeEventListener(
-				type === 'mouseenter' ? 'mouseover' :
-				type === 'mouseleave' ? 'mouseout' : type, handler, false);
-		}
+		obj.removeEventListener(mouseSubst[type] || type, handler, false);
 
 	} else if ('detachEvent' in obj) {
 		obj.detachEvent('on' + type, handler);
@@ -2762,9 +2744,9 @@ function stopPropagation(e) {
 }
 
 // @function disableScrollPropagation(el: HTMLElement): this
-// Adds `stopPropagation` to the element's `'mousewheel'` events (plus browser variants).
+// Adds `stopPropagation` to the element's `'wheel'` events (plus browser variants).
 function disableScrollPropagation(el) {
-	addOne(el, 'mousewheel', stopPropagation);
+	addOne(el, 'wheel', stopPropagation);
 	return this;
 }
 
@@ -2825,7 +2807,7 @@ var wheelPxFactor =
 	gecko ? window.devicePixelRatio : 1;
 
 // @function getWheelDelta(ev: DOMEvent): Number
-// Gets normalized wheel delta from a mousewheel DOM event, in vertical
+// Gets normalized wheel delta from a wheel DOM event, in vertical
 // pixels scrolled (negative if scrolling down).
 // Events from pointing devices without precise scrolling are mapped to
 // a best guess of 60 pixels.
@@ -2872,24 +2854,21 @@ function isExternalTarget(el, e) {
 	return (related !== el);
 }
 
-
-
-
-var DomEvent = (Object.freeze || Object)({
-	on: on,
-	off: off,
-	stopPropagation: stopPropagation,
-	disableScrollPropagation: disableScrollPropagation,
-	disableClickPropagation: disableClickPropagation,
-	preventDefault: preventDefault,
-	stop: stop,
-	getMousePosition: getMousePosition,
-	getWheelDelta: getWheelDelta,
-	fakeStop: fakeStop,
-	skipped: skipped,
-	isExternalTarget: isExternalTarget,
-	addListener: on,
-	removeListener: off
+var DomEvent = ({
+  on: on,
+  off: off,
+  stopPropagation: stopPropagation,
+  disableScrollPropagation: disableScrollPropagation,
+  disableClickPropagation: disableClickPropagation,
+  preventDefault: preventDefault,
+  stop: stop,
+  getMousePosition: getMousePosition,
+  getWheelDelta: getWheelDelta,
+  fakeStop: fakeStop,
+  skipped: skipped,
+  isExternalTarget: isExternalTarget,
+  addListener: on,
+  removeListener: off
 });
 
 /*
@@ -4658,7 +4637,7 @@ var Map = Evented.extend({
 			this._animateToCenter = center;
 			this._animateToZoom = zoom;
 
-			// DomUtil.addClass(this._mapPane, 'leaflet-zoom-anim');
+			addClass(this._mapPane, 'leaflet-zoom-anim');
 		}
 
 		// @section Other Events
@@ -4678,7 +4657,7 @@ var Map = Evented.extend({
 		if (!this._animatingZoom) { return; }
 
 		if (this._mapPane) {
-			// DomUtil.removeClass(this._mapPane, 'leaflet-zoom-anim');
+			removeClass(this._mapPane, 'leaflet-zoom-anim');
 		}
 
 		this._animatingZoom = false;
@@ -5911,12 +5890,15 @@ var Draggable = Evented.extend({
 			this._moved = true;
 			this._startPos = getPosition(this._element).subtract(offset);
 
+			addClass(document.body, 'leaflet-dragging');
+
 			this._lastTarget = e.target || e.srcElement;
 			// IE and Edge do not give the <use> element, so fetch it
 			// if necessary
-			if ((window.SVGElementInstance) && (this._lastTarget instanceof SVGElementInstance)) {
+			if (window.SVGElementInstance && this._lastTarget instanceof window.SVGElementInstance) {
 				this._lastTarget = this._lastTarget.correspondingUseElement;
 			}
+			addClass(this._lastTarget, 'leaflet-drag-target');
 		}
 
 		this._newPos = this._startPos.add(offset);
@@ -5952,7 +5934,10 @@ var Draggable = Evented.extend({
 	},
 
 	finishDrag: function () {
+		removeClass(document.body, 'leaflet-dragging');
+
 		if (this._lastTarget) {
+			removeClass(this._lastTarget, 'leaflet-drag-target');
 			this._lastTarget = null;
 		}
 
@@ -6220,17 +6205,16 @@ function _flat(latlngs) {
 	return isFlat(latlngs);
 }
 
-
-var LineUtil = (Object.freeze || Object)({
-	simplify: simplify,
-	pointToSegmentDistance: pointToSegmentDistance,
-	closestPointOnSegment: closestPointOnSegment,
-	clipSegment: clipSegment,
-	_getEdgeIntersection: _getEdgeIntersection,
-	_getBitCode: _getBitCode,
-	_sqClosestPointOnSegment: _sqClosestPointOnSegment,
-	isFlat: isFlat,
-	_flat: _flat
+var LineUtil = ({
+  simplify: simplify,
+  pointToSegmentDistance: pointToSegmentDistance,
+  closestPointOnSegment: closestPointOnSegment,
+  clipSegment: clipSegment,
+  _getEdgeIntersection: _getEdgeIntersection,
+  _getBitCode: _getBitCode,
+  _sqClosestPointOnSegment: _sqClosestPointOnSegment,
+  isFlat: isFlat,
+  _flat: _flat
 });
 
 /*
@@ -6287,9 +6271,8 @@ function clipPolygon(points, bounds, round) {
 	return points;
 }
 
-
-var PolyUtil = (Object.freeze || Object)({
-	clipPolygon: clipPolygon
+var PolyUtil = ({
+  clipPolygon: clipPolygon
 });
 
 /*
@@ -6386,13 +6369,10 @@ var Mercator = {
 
  */
 
-
-
-
-var index = (Object.freeze || Object)({
-	LonLat: LonLat,
-	Mercator: Mercator,
-	SphericalMercator: SphericalMercator
+var index = ({
+  LonLat: LonLat,
+  Mercator: Mercator,
+  SphericalMercator: SphericalMercator
 });
 
 /*
@@ -6528,6 +6508,10 @@ var Layer = Evented.extend({
 
 	// @method removeFrom(map: Map): this
 	// Removes the layer from the given map
+	//
+	// @alternative
+	// @method removeFrom(group: LayerGroup): this
+	// Removes the layer from the given `LayerGroup`
 	removeFrom: function (obj) {
 		if (obj) {
 			obj.removeLayer(this);
@@ -6988,10 +6972,10 @@ var FeatureGroup = LayerGroup.extend({
 	}
 });
 
-// @factory L.featureGroup(layers: Layer[])
-// Create a feature group, optionally given an initial set of layers.
-var featureGroup = function (layers) {
-	return new FeatureGroup(layers);
+// @factory L.featureGroup(layers?: Layer[], options?: Object)
+// Create a feature group, optionally given an initial set of layers and an `options` object.
+var featureGroup = function (layers, options) {
+	return new FeatureGroup(layers, options);
 };
 
 /*
@@ -7417,7 +7401,7 @@ var Marker = Layer.extend({
 		// `Map pane` where the markers icon will be added.
 		pane: 'markerPane',
 
-		// @option pane: String = 'shadowPane'
+		// @option shadowPane: String = 'shadowPane'
 		// `Map pane` where the markers shadow will be added.
 		shadowPane: 'shadowPane',
 
@@ -7842,7 +7826,7 @@ var Path = Layer.extend({
 		setOptions(this, style);
 		if (this._renderer) {
 			this._renderer._updateStyle(this);
-			if (this.options.stroke && style && style.hasOwnProperty('weight')) {
+			if (this.options.stroke && style && Object.prototype.hasOwnProperty.call(style, 'weight')) {
 				this._updateBounds();
 			}
 		}
@@ -9323,7 +9307,11 @@ var VideoOverlay = ImageOverlay.extend({
 		// @option keepAspectRatio: Boolean = true
 		// Whether the video will save aspect ratio after the projection.
 		// Relevant for supported browsers. Browser compatibility- https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit
-		keepAspectRatio: true
+		keepAspectRatio: true,
+
+		// @option muted: Boolean = false
+		// Whether the video starts on mute when loaded.
+		muted: false
 	},
 
 	_initImage: function () {
@@ -9354,9 +9342,12 @@ var VideoOverlay = ImageOverlay.extend({
 
 		if (!isArray(this._url)) { this._url = [this._url]; }
 
-		if (!this.options.keepAspectRatio && vid.style.hasOwnProperty('objectFit')) { vid.style['objectFit'] = 'fill'; }
+		if (!this.options.keepAspectRatio && Object.prototype.hasOwnProperty.call(vid.style, 'objectFit')) {
+			vid.style['objectFit'] = 'fill';
+		}
 		vid.autoplay = !!this.options.autoplay;
 		vid.loop = !!this.options.loop;
+		vid.muted = !!this.options.muted;
 		for (var i = 0; i < this._url.length; i++) {
 			var source = create$1('source');
 			source.src = this._url[i];
@@ -9522,7 +9513,7 @@ var DivOverlay = Layer.extend({
 	},
 
 	// @method getElement: String|HTMLElement
-	// Alias for [getContent()](#popup-getcontent)
+	// Returns the HTML container of the popup.
 	getElement: function () {
 		return this._container;
 	},
@@ -9829,9 +9820,9 @@ var Popup = DivOverlay.extend({
 		var wrapper = this._wrapper = create$1('div', prefix + '-content-wrapper', container);
 		this._contentNode = create$1('div', prefix + '-content', wrapper);
 
-		disableClickPropagation(wrapper);
+		disableClickPropagation(container);
 		disableScrollPropagation(this._contentNode);
-		on(wrapper, 'contextmenu', stopPropagation);
+		on(container, 'contextmenu', stopPropagation);
 
 		this._tipContainer = create$1('div', prefix + '-tip-container', container);
 		this._tip = create$1('div', prefix + '-tip', this._tipContainer);
@@ -10283,7 +10274,8 @@ var Tooltip = DivOverlay.extend({
 	_adjustPan: function () {},
 
 	_setPosition: function (pos) {
-		var map = this._map,
+		var subX, subY,
+		    map = this._map,
 		    container = this._container,
 		    centerPoint = map.latLngToContainerPoint(map.getCenter()),
 		    tooltipPoint = map.layerPointToContainerPoint(pos),
@@ -10294,18 +10286,31 @@ var Tooltip = DivOverlay.extend({
 		    anchor = this._getAnchor();
 
 		if (direction === 'top') {
-			pos = pos.add(toPoint(-tooltipWidth / 2 + offset.x, -tooltipHeight + offset.y + anchor.y, true));
+			subX = tooltipWidth / 2;
+			subY = tooltipHeight;
 		} else if (direction === 'bottom') {
-			pos = pos.subtract(toPoint(tooltipWidth / 2 - offset.x, -offset.y, true));
+			subX = tooltipWidth / 2;
+			subY = 0;
 		} else if (direction === 'center') {
-			pos = pos.subtract(toPoint(tooltipWidth / 2 + offset.x, tooltipHeight / 2 - anchor.y + offset.y, true));
-		} else if (direction === 'right' || direction === 'auto' && tooltipPoint.x < centerPoint.x) {
+			subX = tooltipWidth / 2;
+			subY = tooltipHeight / 2;
+		} else if (direction === 'right') {
+			subX = 0;
+			subY = tooltipHeight / 2;
+		} else if (direction === 'left') {
+			subX = tooltipWidth;
+			subY = tooltipHeight / 2;
+		} else if (tooltipPoint.x < centerPoint.x) {
 			direction = 'right';
-			pos = pos.add(toPoint(offset.x + anchor.x, anchor.y - tooltipHeight / 2 + offset.y, true));
+			subX = 0;
+			subY = tooltipHeight / 2;
 		} else {
 			direction = 'left';
-			pos = pos.subtract(toPoint(tooltipWidth + anchor.x - offset.x, tooltipHeight / 2 - anchor.y - offset.y, true));
+			subX = tooltipWidth + (offset.x + anchor.x) * 2;
+			subY = tooltipHeight / 2;
 		}
+
+		pos = pos.subtract(toPoint(subX, subY, true)).add(offset).add(anchor);
 
 		removeClass(container, 'leaflet-tooltip-right');
 		removeClass(container, 'leaflet-tooltip-left');
@@ -10979,6 +10984,7 @@ var GridLayer = Layer.extend({
 		if (zoom === undefined) { return undefined; }
 
 		for (var z in this._levels) {
+			z = Number(z);
 			if (this._levels[z].el.children.length || z === zoom) {
 				this._levels[z].el.style.zIndex = maxZoom - Math.abs(zoom - z);
 				this._onUpdateLevel(z);
@@ -11075,7 +11081,7 @@ var GridLayer = Layer.extend({
 	_invalidateAll: function () {
 		for (var z in this._levels) {
 			remove(this._levels[z].el);
-			this._onRemoveLevel(z);
+			this._onRemoveLevel(Number(z));
 			delete this._levels[z];
 		}
 		this._removeAllTiles();
@@ -11158,10 +11164,12 @@ var GridLayer = Layer.extend({
 	},
 
 	_setView: function (center, zoom, noPrune, noUpdate) {
-		var tileZoom = this._clampZoom(Math.round(zoom));
+		var tileZoom = Math.round(zoom);
 		if ((this.options.maxZoom !== undefined && tileZoom > this.options.maxZoom) ||
 		    (this.options.minZoom !== undefined && tileZoom < this.options.minZoom)) {
 			tileZoom = undefined;
+		} else {
+			tileZoom = this._clampZoom(tileZoom);
 		}
 
 		var tileZoomChanged = this.options.updateWhenZooming && (tileZoom !== this._tileZoom);
@@ -12415,8 +12423,10 @@ var Canvas = Renderer.extend({
 
 		for (var order = this._drawFirst; order; order = order.next) {
 			layer = order.layer;
-			if (layer.options.interactive && layer._containsPoint(point) && !this._map._draggableMoved(layer)) {
-				clickedLayer = layer;
+			if (layer.options.interactive && layer._containsPoint(point)) {
+				if (!(e.type === 'click' || e.type !== 'preclick') || !this._map._draggableMoved(layer)) {
+					clickedLayer = layer;
+				}
 			}
 		}
 		if (clickedLayer)  {
@@ -13614,7 +13624,7 @@ Map.addInitHook('addHandler', 'keyboard', Keyboard);
 // @namespace Map
 // @section Interaction Options
 Map.mergeOptions({
-	// @section Mousewheel options
+	// @section Mouse wheel options
 	// @option scrollWheelZoom: Boolean|String = true
 	// Whether the map can be zoomed by using the mouse wheel. If passed `'center'`,
 	// it will zoom to the center of the view regardless of where the mouse was.
@@ -13634,13 +13644,13 @@ Map.mergeOptions({
 
 var ScrollWheelZoom = Handler.extend({
 	addHooks: function () {
-		on(this._map._container, 'mousewheel', this._onWheelScroll, this);
+		on(this._map._container, 'wheel', this._onWheelScroll, this);
 
 		this._delta = 0;
 	},
 
 	removeHooks: function () {
-		off(this._map._container, 'mousewheel', this._onWheelScroll, this);
+		off(this._map._container, 'wheel', this._onWheelScroll, this);
 	},
 
 	_onWheelScroll: function (e) {
@@ -13953,8 +13963,6 @@ Map.Keyboard = Keyboard;
 Map.ScrollWheelZoom = ScrollWheelZoom;
 Map.Tap = Tap;
 Map.TouchZoom = TouchZoom;
-
-Object.freeze = freeze;
 
 export { version, Control, control, Browser, Evented, Mixin, Util, Class, Handler, extend, bind, stamp, setOptions, DomEvent, DomUtil, PosAnimation, Draggable, LineUtil, PolyUtil, Point, toPoint as point, Bounds, toBounds as bounds, Transformation, toTransformation as transformation, index as Projection, LatLng, toLatLng as latLng, LatLngBounds, toLatLngBounds as latLngBounds, CRS, GeoJSON, geoJSON, geoJson, Layer, LayerGroup, layerGroup, FeatureGroup, featureGroup, ImageOverlay, imageOverlay, VideoOverlay, videoOverlay, SVGOverlay, svgOverlay, DivOverlay, Popup, popup, Tooltip, tooltip, Icon, icon, DivIcon, divIcon, Marker, marker, TileLayer, tileLayer, GridLayer, gridLayer, SVG, svg$1 as svg, Renderer, Canvas, canvas$1 as canvas, Path, CircleMarker, circleMarker, Circle, circle, Polyline, polyline, Polygon, polygon, Rectangle, rectangle, Map, createMap as map };
 //# sourceMappingURL=leaflet-src.esm.js.map
